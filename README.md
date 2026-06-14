@@ -1,204 +1,230 @@
-# Getting Started with Agents Using Microsoft Foundry
+# CertifyAI - Enterprise Learning and Certification Management
 
-The agent leverages Foundry Agent Service and utilizes file search for knowledge retrieval from uploaded files, enabling it to generate responses with citations. The solution also includes built-in monitoring capabilities with tracing to ensure easier troubleshooting and optimized performance.
+> Agents League Hackathon 2026 | Reasoning Agents Track | Built on Microsoft Azure AI Foundry
 
-<div style="text-align:center;">
+CertifyAI is an intelligent multi-agent system that helps enterprise employees and managers navigate certification learning paths, study planning, readiness assessment, and engagement strategy. It is grounded in organizational knowledge data and enforces role-based access control through agent reasoning.
 
-[**SOLUTION OVERVIEW**](#solution-overview) \| [**GETTING STARTED**](#getting-started) \| [**LOCAL DEVELOPMENT**](#local-development) \| [**RESOURCE CLEAN-UP**](#resource-clean-up) \| [**GUIDANCE**](#guidance) \| [**TROUBLESHOOTING**](./docs/troubleshooting.md)
+---
 
-</div>
+## Demo
 
-**Note**: With any AI solutions you create using these templates, you are responsible for assessing all associated risks, and for complying with all applicable laws and safety standards. Learn more in the transparency documents for [Agent Service](https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Flearn.microsoft.com%2Fen-us%2Fazure%2Fai-foundry%2Fresponsible-ai%2Fagents%2Ftransparency-note&data=05%7C02%7Chowieleung%40microsoft.com%7C42645ec29da244bd920508de2095bcad%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638984024651276233%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=Un4HtoksTeodWPQMQp7zh8BNW6j%2BeIw4mcs6gbS4e6E%3D&reserved=0) and [Agent Framework](https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmicrosoft%2Fagent-framework%2Fblob%2Fmain%2FTRANSPARENCY_FAQ.md&data=05%7C02%7Chowieleung%40microsoft.com%7C42645ec29da244bd920508de2095bcad%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638984024651325701%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=19nfzxn8ZN1qr7Hy77fn%2BgFXD1sc%2BXiuPuUi3H2NNz4%3D&reserved=0).
+![CertifyAI Web Application](docs/images/webapp_screenshot.png)
 
-## Solution Overview
+**Demo Flow:**
+1. User identifies themselves with Employee ID (EMP-XXX for learners, MGR-XXX for managers)
+2. System verifies identity against Employee Directory in the knowledge base
+3. Orchestrator routes request to relevant specialist agents via LLM-based routing
+4. Each specialist agent retrieves grounded data from Azure AI Search
+5. Final synthesized response delivered with named knowledge base citations
 
-This solution deploys a web-based chat application with an AI agent running in Azure Container App.
+---
 
-The agent leverages the Foundry Agent Service and utilizes Azure AI Search for knowledge retrieval from uploaded files, enabling it to generate responses with citations. The solution also includes built-in monitoring capabilities with tracing to ensure easier troubleshooting and optimized performance.
+## Architecture
 
-This solution creates a Microsoft Foundry project and Foundry Tools. More details about the resources can be found in the [resources](#resources) documentation. There are options to enable logging, tracing, and monitoring.
+![CertifyAI Architecture](docs/images/architecture.png)
 
-Instructions are provided for deployment through GitHub Codespaces, VS Code Dev Containers, and your local development environment.
+### How it works
 
-### Solution Architecture
+The user interacts with a FastAPI web application that enforces RBAC in code before any agent is called. The orchestrator agent handles identity verification and uses LLM-based reasoning to decide which specialist agents to invoke. Specialist agents are called sequentially, each building on the previous agent's findings, and all are grounded via Azure AI Search (Foundry IQ). Application Insights captures traces from all layers via OpenTelemetry.
 
-![Architecture diagram showing that user input is provided to the Azure Container App, which contains the app code. With user identity and resource access through managed identity, the input is used to form a response. The input and the Azure monitor are able to use the Azure resources deployed in the solution: Application Insights, Microsoft Foundry Project, Foundry Tools, Storage account, Azure Container App, and Log Analytics Workspace.](docs/images/architecture.png)
+### Microsoft Technologies Used
 
-The app code runs in an Azure Container App to process user input and generate a response to the user. It leverages Microsoft Foundry projects and Foundry Tools, including the model and agent.
+| Component | Technology |
+|-----------|-----------|
+| Agent platform | Azure AI Foundry Agent Service |
+| Knowledge base | Azure AI Search (Foundry IQ) |
+| Model | GPT-4o |
+| Observability | Application Insights + OpenTelemetry |
+| Web app | FastAPI + React + Fluent UI |
+| Auth | Azure CLI Credential / DefaultAzureCredential |
 
-### Key Features
+---
 
-- **[Knowledge Retrieval](./docs/deploy_customization.md#enabling-and-disabling-resources-provision)**<br/>
-The AI agent uses file search or Azure AI Search to retrieve knowledge from uploaded files.
+## Key Features
 
-- **[Customizable AI Model Deployment](./docs/deploy_customization.md#customizing-model-deployments)**<br/>
-The solution allows users to configure and deploy AI models, defaulting to gpt-5-mini, with options to adjust model capacity and knowledge retrieval methods.
+### Multi-Agent Sequential Orchestration
+The orchestrator uses LLM-based intelligent routing to decide which specialist agents to invoke based on the user query. Simple queries invoke one agent. Complex queries chain multiple agents sequentially, each building on the previous agent's findings.
 
-- **[Built-in Monitoring and Tracing](./docs/observability.md#tracing-and-monitoring)**<br/>
-Integrated monitoring capabilities, including Azure Monitor and Application Insights, enable tracing and logging for easier troubleshooting and performance optimization.
+### Foundry IQ Knowledge Grounding
+All specialist agents are connected to an Azure AI Search index containing six synthetic enterprise documents. Every response is grounded with named citations from the knowledge base.
 
-- **[Flexible Deployment Options](./docs/deployment.md)**<br/>
-The solution supports deployment through GitHub Codespaces, VS Code Dev Containers, or local environments, providing flexibility for different development workflows.
+Knowledge base documents:
+- Engineering Certification Enablement Guide
+- Learner Performance Data
+- Work Activity Signals
+- Workload Insights Report
+- Team Learning Report
+- Employee Directory and Access Rules
 
-- **[Continuous Evaluation](./docs/observability.md#continuous-evaluation)**<br/>
-Proactively monitor and assess your agent's performance over time with continuous evaluation that automatically checks real-world interactions to identify potential issues before they impact users.
+### Role-Based Access Control (RBAC)
+Identity is verified at the start of every conversation. The authorized employee ID is stored in conversation metadata. All subsequent requests are checked in code before reaching any agent. Learners can only access their own data. Managers receive anonymized team-level aggregates. Access violations are blocked immediately with an audit log entry.
 
-- **[Agent Evaluation](./docs/observability.md#agent-evaluation)**<br/>
-This solution demonstrates how you can evaluate your agent's performance and quality through Pytest.
+### Critic and Verifier Pattern
+The orchestrator runs a self-verification step before returning any answer, checking for unsupported claims, incorrect risk classifications, unauthorized data exposure, and exam outcome promises.
 
-- **[AI Red Teaming Agent](./docs/observability.md#ai-red-teaming-agent)**<br/>
-Facilitates the creation of an AI Red Teaming Agent through Pytest that can run batch automated scans for safety and security on your Agent solution to check your risk posture before deploying it into production.
+### Responsible AI Guardrails
+All six agents have content safety filters configured:
+- Jailbreak detection
+- Indirect prompt injection protection
+- PII detection (email, phone, passport, government IDs)
+- Content harm blocking (hate, sexual, self-harm, violence)
+- Task drift detection
+- Audit logging on every response
 
-<br/>
+### Evaluation Results
 
-Here is a screenshot showing the chatting web application with requests and responses between the system and the user:
+```
+Overall score : 87%
+Tests passed  : 8 / 8
+Accuracy      : 93/100
+Reasoning     : 87/100
+Safety        : 80/100
+```
 
-![Screenshot of chatting web application showing requests and responses between agent and the user.](docs/images/webapp_screenshot.png)
+---
 
-## Getting Started
+## Agent Roles
 
-| [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/get-started-with-ai-agents) | [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/get-started-with-ai-agents) |
-|---|---|
+| Agent | Responsibility |
+|-------|---------------|
+| orchestrator-agent | Entry point, RBAC enforcement, LLM-based routing, Critic and Verifier |
+| learning-path-curator | Certification paths by role (AZ-204, AZ-400, DP-203 etc.) |
+| study-plan-generator | Capacity-aware weekly study schedules |
+| assessment-agent | Readiness evaluation with practice questions |
+| engagement-agent | Study timing, reminders, escalation strategy |
+| manager-insights-agent | Anonymized team-level certification readiness |
 
-1. Click `Open in GitHub Codespaces` or `Dev Containers` button above
-2. Wait for the environment to load
-3. Deploy to Azure — choose one of the options below:
+---
 
-   #### Option A: `azd up` (7–15 minutes)
+## Risk Classification
 
-   If you have experience with `azd` templates, run directly in the terminal:
+| Risk Level | Criteria |
+|-----------|---------|
+| HIGH RISK | Focus hours below 10 OR study hours below 15 OR practice score below 65 |
+| MODERATE RISK | Focus hours below 12 OR study hours below 20 OR practice score below 75 |
+| LOW RISK | All thresholds met |
 
-   ```bash
-   azd up
-   ```
+HIGH RISK employees are automatically flagged for manager review.
 
-   Follow the prompts to select your Azure subscription and region, then wait for
-   deployment to complete — you’ll get a web app URL when finished.
-
-   #### Option B: Copilot-assisted `/up` (~40 minutes)
-
-   > ⚠️ **Important:** The `/up` skill only works in the **Copilot CLI terminal** (launched via the `copilot` command). It does **not** work in the VS Code Copilot Chat window.
-
-   If you’re new to `azd` templates and want guided assistance, use the Copilot CLI:
-
-   ```bash
-   copilot
-   ```
-
-   Then type `/up` in the Copilot CLI:
-
-   ```
-   /up
-   ```
-
-   Copilot will walk you through each step
-   interactively — checking prerequisites (RBAC, model quota), selecting your
-   subscription and region, provisioning infrastructure, and health-checking the
-   deployed app.
-   See [up-example.md](.github/skills/up/up-example.md) for a sample interaction.
-
-For detailed deployment options and troubleshooting, see the [full deployment guide](./docs/deployment.md).
-**After deployment, try these [sample questions](./docs/sample_questions.md) to test your agent.**
+---
 
 ## Local Development
 
-For developers who want to run the application locally or customize the agent:
+### Prerequisites
 
-- **[Local Development Guide](./docs/local_development.md)** - Set up a local development environment, customize the frontend (starting with AgentPreview.tsx), modify agent instructions and tools, and use evaluation to improve your code.
+- Python 3.11+
+- Node.js 18+
+- pnpm
+- Azure CLI
+- Azure AI Foundry project with GPT-4o deployment
 
-This guide covers:
-- Environment setup and prerequisites
-- Running the development server locally
-- Frontend customization and backend communication
-- Agent instructions and tools modification
-- File management and agent recreation
-- Using agent evaluation for code improvement
+### Setup
 
+```bash
+git clone https://github.com/serasr/certifyai-enterprise-certification-agent.git
+cd certifyai-enterprise-certification-agent
 
-## Resource Clean-up
+python -m venv .venv
+.venv\Scripts\activate
 
-To prevent incurring unnecessary charges, it's important to clean up your Azure resources after completing your work with the application.
+pip install -r src/requirements.txt
 
-- **When to Clean Up:**
-  - After you have finished testing or demonstrating the application.
-  - If the application is no longer needed or you have transitioned to a different project or environment.
-  - When you have completed development and are ready to decommission the application.
+cd src/frontend
+pnpm install
+pnpm run build
+cd ../..
+```
 
-- **Deleting Resources:**
-  To delete all associated resources and shut down the application, execute the following command:
-  
-    ```bash
-    azd down
-    ```
+### Environment Variables
 
-    Please note that this process may take up to 20 minutes to complete.
+Create `.azure/enterprise-cert-agent/.env`:
 
-⚠️ Alternatively, you can delete the resource group directly from the Azure Portal to clean up resources.
+```
+AZURE_EXISTING_AIPROJECT_ENDPOINT=<your-foundry-project-endpoint>
+AZURE_EXISTING_AGENT_ID=orchestrator-agent:<version>
+AZURE_AI_AGENT_DEPLOYMENT_NAME=gpt-4o
+AZURE_SEARCH_ENDPOINT=<your-search-endpoint>
+AZURE_SEARCH_ADMIN_KEY=<your-search-admin-key>
+AZURE_SEARCH_KB_NAME=cert-knowledge-base
+ENABLE_AZURE_MONITOR_TRACING=true
+```
 
-## Guidance
+### Run
 
-### Costs
+```bash
+az login --tenant <your-tenant-id>
+cd src
+python -m uvicorn api.main:create_app --factory --reload --port 50505
+```
 
-Pricing varies per region and usage, so it isn't possible to predict exact costs for your usage.
-The majority of the Azure resources used in this infrastructure are on usage-based pricing tiers.
+Open `http://127.0.0.1:50505`
 
-You can try the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator) for the resources:
+### Run Evaluation
 
-- **Microsoft Foundry**: Free tier. [Pricing](https://azure.microsoft.com/pricing/details/ai-studio/)  
-- **Azure Storage Account**: Standard tier, LRS. Pricing is based on storage and operations. [Pricing](https://azure.microsoft.com/pricing/details/storage/blobs/)  
-- **Foundry Tools**: S0 tier, defaults to gpt-5-mini. Pricing is based on token count. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/)  
-- **Azure Container App**: Consumption tier with 0.5 CPU, 1GiB memory/storage. Pricing is based on resource allocation, and each month allows for a certain amount of free usage. [Pricing](https://azure.microsoft.com/pricing/details/container-apps/)  
-- **Log analytics**: Pay-as-you-go tier. Costs based on data ingested. [Pricing](https://azure.microsoft.com/pricing/details/monitor/)  
-- **Agent Evaluations**: Incurs the cost of your provided model deployment used for local evaluations.  
-- **AI Red Teaming Agent**: Leverages Azure AI Risk and Safety Evaluations to assess attack success from the automated AI red teaming scan. Users are billed based on the consumption of Risk and Safety Evaluations as listed in [our Azure pricing page](https://azure.microsoft.com/pricing/details/ai-foundry/). Click on the tab labeled “Complete AI Toolchain” to view the pricing details.
+```bash
+python tests/evaluate_agent.py --verbose --output results/eval_report.json
+```
 
-⚠️ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
-either by deleting the resource group in the Portal or running `azd down`.
+---
 
-### Security guidelines
+## Known Limitations and Platform Bugs
 
-This template also uses [Managed Identity](https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/overview) for local development and deployment.
+### MCP 403 Error on Azure AI Search Knowledge Base
+**Issue:** Foundry Agent Service MCP tool enumeration fails with HTTP 403 against Azure AI Search knowledge bases.
 
-To ensure continued best practices in your own repository, we recommend that anyone creating solutions based on our templates ensure that the [Github secret scanning](https://docs.github.com/code-security/secret-scanning/about-secret-scanning) setting is enabled.
+**Workaround:** Switched from MCP knowledge base connection to the native Azure AI Search tool. All agents are grounded via Azure AI Search directly.
 
-You may want to consider additional security measures, such as:
+### A2A 401 PermissionDenied Between Foundry Agents
+**Issue:** Agent-to-agent calls via the A2APreviewTool return HTTP 401 even with correct Foundry User role assigned. This is a platform-level bug in the Foundry Agent Service preview.
 
-- Enabling Microsoft Defender for Cloud to [secure your Azure resources](https://learn.microsoft.com/azure/defender-for-cloud/).
-- Protecting the Azure Container Apps instance with a [firewall](https://learn.microsoft.com/azure/container-apps/waf-app-gateway) and/or [Virtual Network](https://learn.microsoft.com/azure/container-apps/networking?tabs=workload-profiles-env%2Cazure-cli).
+**Workaround:** Sequential Responses API calls from Python code, passing each agent's output as context to the next. This achieves the same multi-agent chain without relying on A2A.
 
-> **Important Security Notice** <br/>
-This template, the application code and configuration it contains, has been built to showcase Microsoft Azure specific services and tools. We strongly advise our customers not to make this code part of their production environments without implementing or enabling additional security features.  <br/><br/>
-For a more comprehensive list of best practices and security recommendations for Intelligent Applications, [visit our official documentation](https://learn.microsoft.com/azure/ai-foundry/).
+### KB Source Mapping
+**Note:** Citation markers from Azure AI Search are mapped to human-readable source names via a dictionary in `routes.py`. In production this should be resolved dynamically from the search index metadata.
 
-### Resources
+### Identity Verification via Employee ID (Demo Simplification)
+**Current behaviour:** The system accepts a self-reported Employee ID (EMP-XXX or MGR-XXX) from the user and verifies it against the Employee Directory in the knowledge base. Access control is then enforced based on this ID for the remainder of the session.
 
-This template creates everything you need to get started with Microsoft Foundry:
+**Production recommendation:** In a production enterprise deployment, the Employee ID input should trigger a redirect to the corporate identity provider (Azure Active Directory / Entra ID) for proper authentication. The verified identity from the OAuth/OIDC token should be used to determine the employee's role and access level, rather than relying on self-reported input. This would eliminate the possibility of a user claiming a different employee's ID to attempt unauthorized access.
+
+---
+
+## Costs
+
+- **Microsoft Foundry:** Free tier. [Pricing](https://azure.microsoft.com/pricing/details/ai-studio/)
+- **Azure AI Search:** Free tier. [Pricing](https://azure.microsoft.com/pricing/details/search/)
+- **Azure OpenAI (GPT-4o):** Pay-per-token. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
+- **Application Insights:** Pay-as-you-go. [Pricing](https://azure.microsoft.com/pricing/details/monitor/)
+
+---
+
+## Security
+
+This solution uses Azure CLI Credential for local development. For production:
+
+- Use Managed Identity instead of CLI credentials
+- Enable Microsoft Defender for Cloud
+- Restrict access with Azure Virtual Network
+- Store the Azure AI Search Admin Key in Azure Key Vault
+- Enable GitHub secret scanning on your repository
+
+---
+
+## Resources
 
 | Resource | Description |
 |----------|-------------|
-| [Azure AI Project](https://learn.microsoft.com/azure/ai-studio/how-to/create-projects) | Provides a collaborative workspace for AI development with access to models, data, and compute resources |
-| [Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/) | Powers the AI agents for conversational AI and intelligent search capabilities. Default models deployed are gpt-5-mini, but any Azure AI models can be specified per the [documentation](docs/deploy_customization.md#customizing-model-deployments) |
-| [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/) | Hosts and scales the web application with serverless containers |
-| [Azure Container Registry](https://learn.microsoft.com/azure/container-registry/) | Stores and manages container images for secure deployment |
-| [Storage Account](https://learn.microsoft.com/azure/storage/blobs/) | Provides blob storage for application data and file uploads |
-| [Blob Storage](https://learn.microsoft.com/azure/storage/blobs/) | Container (`documents`) used for uploaded files that feed AI Search |
-| [AI Search Service](https://learn.microsoft.com/azure/search/) | *Optional* - Enables hybrid search capabilities combining semantic and vector search |
-| [Application Insights](https://learn.microsoft.com/azure/azure-monitor/app/app-insights-overview) | *Optional* - Provides application performance monitoring, logging, and telemetry for debugging and optimization |
-| [Log Analytics Workspace](https://learn.microsoft.com/azure/azure-monitor/logs/log-analytics-workspace-overview) | *Optional* - Collects and analyzes telemetry data for monitoring and troubleshooting |
+| [Azure AI Foundry Agent Service](https://learn.microsoft.com/azure/ai-foundry/agents/) | Hosted agent runtime with tools and knowledge |
+| [Azure AI Search](https://learn.microsoft.com/azure/search/) | Knowledge base for grounded responses |
+| [Application Insights](https://learn.microsoft.com/azure/azure-monitor/app/app-insights-overview) | Tracing and observability |
+| [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) | Sequential multi-agent orchestration |
 
-## Troubleshooting
-
-For solutions to common deployment, container app, and agent issues, see the [Troubleshooting Guide](./docs/troubleshooting.md).
-
+---
 
 ## Disclaimers
 
-To the extent that the Software includes components or code used in or derived from Microsoft products or services, including without limitation Microsoft Azure Services (collectively, “Microsoft Products and Services”), you must also comply with the Product Terms applicable to such Microsoft Products and Services. You acknowledge and agree that the license governing the Software does not grant you a license or other right to use Microsoft Products and Services. Nothing in the license or this ReadMe file will serve to supersede, amend, terminate or modify any terms in the Product Terms for any Microsoft Products and Services.
+This solution uses synthetic data for demonstration purposes only. No real employee data is used or stored.
 
-You must also comply with all domestic and international export laws and regulations that apply to the Software, which include restrictions on destinations, end users, and end use. For further information on export restrictions, visit <https://aka.ms/exporting>.
+To the extent that the Software includes components or code used in or derived from Microsoft products or services, you must comply with the Product Terms applicable to such Microsoft Products and Services. See transparency documents for [Agent Service](https://learn.microsoft.com/azure/ai-foundry/responsible-ai/agents/transparency-note) and [Agent Framework](https://github.com/microsoft/agent-framework/blob/main/TRANSPARENCY_FAQ.md).
 
-You acknowledge that the Software and Microsoft Products and Services (1) are not designed, intended or made available as a medical device(s), and (2) are not designed or intended to be a substitute for professional medical advice, diagnosis, treatment, or judgment and should not be used to replace or as a substitute for professional medical advice, diagnosis, treatment, or judgment. Customer is solely responsible for displaying and/or obtaining appropriate consents, warnings, disclaimers, and acknowledgements to end users of Customer’s implementation of the Online Services.
-
-You acknowledge the Software is not subject to SOC 1 and SOC 2 compliance audits. No Microsoft technology, nor any of its component technologies, including the Software, is intended or made available as a substitute for the professional advice, opinion, or judgement of a certified financial services professional. Do not use the Software to replace, substitute, or provide professional financial advice or judgment.  
-
-BY ACCESSING OR USING THE SOFTWARE, YOU ACKNOWLEDGE THAT THE SOFTWARE IS NOT DESIGNED OR INTENDED TO SUPPORT ANY USE IN WHICH A SERVICE INTERRUPTION, DEFECT, ERROR, OR OTHER FAILURE OF THE SOFTWARE COULD RESULT IN THE DEATH OR SERIOUS BODILY INJURY OF ANY PERSON OR IN PHYSICAL OR ENVIRONMENTAL DAMAGE (COLLECTIVELY, “HIGH-RISK USE”), AND THAT YOU WILL ENSURE THAT, IN THE EVENT OF ANY INTERRUPTION, DEFECT, ERROR, OR OTHER FAILURE OF THE SOFTWARE, THE SAFETY OF PEOPLE, PROPERTY, AND THE ENVIRONMENT ARE NOT REDUCED BELOW A LEVEL THAT IS REASONABLY, APPROPRIATE, AND LEGAL, WHETHER IN GENERAL OR IN A SPECIFIC INDUSTRY. BY ACCESSING THE SOFTWARE, YOU FURTHER ACKNOWLEDGE THAT YOUR HIGH-RISK USE OF THE SOFTWARE IS AT YOUR OWN RISK.
+BY ACCESSING OR USING THE SOFTWARE, YOU ACKNOWLEDGE THAT THE SOFTWARE IS NOT DESIGNED OR INTENDED TO SUPPORT ANY USE IN WHICH A SERVICE INTERRUPTION, DEFECT, ERROR, OR OTHER FAILURE OF THE SOFTWARE COULD RESULT IN THE DEATH OR SERIOUS BODILY INJURY OF ANY PERSON OR IN PHYSICAL OR ENVIRONMENTAL DAMAGE, AND THAT YOU WILL ENSURE THAT THE SAFETY OF PEOPLE, PROPERTY, AND THE ENVIRONMENT ARE NOT REDUCED BELOW A LEVEL THAT IS REASONABLY APPROPRIATE AND LEGAL.
