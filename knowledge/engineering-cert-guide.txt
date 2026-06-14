@@ -1,0 +1,30 @@
+Engineering Certification Enablement Guide (Synthetic)
+
+Cloud Engineer:
+- Primary: AZ-204
+- Secondary: AZ-305
+- Recommended Study Hours: 20
+- Prerequisites: Basic Azure knowledge
+- Target practice score before exam: 75%
+
+DevOps Engineer:
+- Primary: AZ-400
+- Secondary: AZ-104
+- Recommended Study Hours: 25
+- Prerequisites: CI/CD experience
+- Target practice score before exam: 75%
+
+Data Engineer:
+- Primary: DP-203
+- Secondary: DP-900
+- Recommended Study Hours: 22
+- Prerequisites: SQL fundamentals
+- Target practice score before exam: 75%
+
+Recommended Study Pattern:
+- 1-2 hours daily focused study
+- Weekly assessment checkpoints
+- Target 75% practice score before exam
+- Pair study with hands-on Azure lab work
+
+Note: This is synthetic data for demonstration purposes only.

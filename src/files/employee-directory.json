@@ -1,0 +1,89 @@
+{
+  "note": "Synthetic data for demonstration purposes only",
+  "employees": [
+    {
+      "employee_id": "EMP-001",
+      "name": "Alex Chen",
+      "role": "Cloud Engineer",
+      "access_level": "learner",
+      "team": "Team A",
+      "manager_id": "MGR-001"
+    },
+    {
+      "employee_id": "EMP-002",
+      "name": "Jordan Smith",
+      "role": "DevOps Engineer",
+      "access_level": "learner",
+      "team": "Team B",
+      "manager_id": "MGR-002"
+    },
+    {
+      "employee_id": "EMP-003",
+      "name": "Sam Patel",
+      "role": "Data Engineer",
+      "access_level": "learner",
+      "team": "Team C",
+      "manager_id": "MGR-003"
+    },
+    {
+      "employee_id": "EMP-004",
+      "name": "Riley Johnson",
+      "role": "DevOps Engineer",
+      "access_level": "learner",
+      "team": "Team B",
+      "manager_id": "MGR-002"
+    },
+    {
+      "employee_id": "EMP-005",
+      "name": "Morgan Lee",
+      "role": "Cloud Engineer",
+      "access_level": "learner",
+      "team": "Team A",
+      "manager_id": "MGR-001"
+    },
+    {
+      "employee_id": "MGR-001",
+      "name": "Taylor Brown",
+      "role": "Engineering Manager",
+      "access_level": "manager",
+      "team": "Team A",
+      "manages_teams": ["Team A"],
+      "manages_employees": ["EMP-001", "EMP-005"]
+    },
+    {
+      "employee_id": "MGR-002",
+      "name": "Casey Wilson",
+      "role": "Engineering Manager",
+      "access_level": "manager",
+      "team": "Team B",
+      "manages_teams": ["Team B"],
+      "manages_employees": ["EMP-002", "EMP-004"]
+    },
+    {
+      "employee_id": "MGR-003",
+      "name": "Drew Martinez",
+      "role": "Engineering Manager",
+      "access_level": "manager",
+      "team": "Team C",
+      "manages_teams": ["Team C"],
+      "manages_employees": ["EMP-003"]
+    }
+  ],
+  "access_rules": {
+    "learner": [
+      "Can view own certification path",
+      "Can view own study plan",
+      "Can view own readiness assessment",
+      "Can view own work activity signals",
+      "CANNOT view other employees data",
+      "CANNOT view team aggregates"
+    ],
+    "manager": [
+      "Can view team-level aggregates",
+      "Can view team certification readiness",
+      "Can view HIGH RISK employee flags (anonymized)",
+      "Can view team learning reports",
+      "CANNOT view individual employee details without their consent"
+    ]
+  }
+}

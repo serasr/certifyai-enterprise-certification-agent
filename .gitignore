@@ -1,0 +1,32 @@
+__pycache__/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.azure
+
+# Node.js dependencies
+node_modules/
+.pnpm-store/
+.pnpm-debug.log
+
+# React build output
+src/api/static/react/
+
+# Debug and test scripts
+test_connection.py
+test_a2a.py
+enable_a2a_endpoints.py
+setup_kb_connection.py
+setup_orchestrator_a2a.py
+upload_employee_directory.py
+
+# Temporary files
+*.pyc
+.DS_Store
+

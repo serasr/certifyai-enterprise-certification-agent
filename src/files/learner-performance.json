@@ -1,0 +1,50 @@
+{
+  "note": "Synthetic data for demonstration purposes only",
+  "learners": [
+    {
+      "learner_id": "L-1001",
+      "role": "Cloud Engineer",
+      "certification": "AZ-204",
+      "practice_score_avg": 67,
+      "hours_studied": 18,
+      "exam_outcome": "Fail",
+      "risk_level": "HIGH"
+    },
+    {
+      "learner_id": "L-1002",
+      "role": "DevOps Engineer",
+      "certification": "AZ-400",
+      "practice_score_avg": 82,
+      "hours_studied": 24,
+      "exam_outcome": "Pass",
+      "risk_level": "LOW"
+    },
+    {
+      "learner_id": "L-1003",
+      "role": "Data Engineer",
+      "certification": "DP-203",
+      "practice_score_avg": 74,
+      "hours_studied": 20,
+      "exam_outcome": "Pass",
+      "risk_level": "LOW"
+    },
+    {
+      "learner_id": "L-1004",
+      "role": "Cloud Engineer",
+      "certification": "AZ-204",
+      "practice_score_avg": 58,
+      "hours_studied": 12,
+      "exam_outcome": "Fail",
+      "risk_level": "HIGH"
+    },
+    {
+      "learner_id": "L-1005",
+      "role": "DevOps Engineer",
+      "certification": "AZ-400",
+      "practice_score_avg": 79,
+      "hours_studied": 22,
+      "exam_outcome": "Pass",
+      "risk_level": "LOW"
+    }
+  ]
+}

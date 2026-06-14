@@ -1,0 +1,25 @@
+Workload and Learning Correlation Report (Synthetic)
+
+Reporting Period: Q1 2026
+
+Key Insights:
+- Employees with more than 20 meeting hours per week show 
+  lower study completion rates
+- Optimal completion appears when learners have 12-18 meeting 
+  hours and at least 15 focus hours per week
+- Learners with fewer than 10 focus hours per week are 3x 
+  more likely to miss certification deadlines
+
+Work Pattern Analysis:
+- EMP-001: 22 meeting hrs/week, 10 focus hrs - HIGH RISK
+- EMP-002: 15 meeting hrs/week, 18 focus hrs - ON TRACK
+- EMP-003: 18 meeting hrs/week, 12 focus hrs - MODERATE RISK
+- EMP-004: 10 meeting hrs/week, 22 focus hrs - LOW RISK
+- EMP-005: 25 meeting hrs/week, 8 focus hrs - HIGH RISK
+
+Recommendations:
+- Schedule learning blocks during focus-heavy periods
+- Avoid scheduling assessments during high-meeting weeks
+- Flag employees with less than 10 focus hours for manager review
+
+Note: This is synthetic data for demonstration purposes only.

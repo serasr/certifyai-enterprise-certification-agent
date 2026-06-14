@@ -1,0 +1,45 @@
+{
+  "note": "Synthetic data for demonstration purposes only",
+  "employees": [
+    {
+      "employee_id": "EMP-001",
+      "meeting_hours_per_week": 22,
+      "focus_hours_per_week": 10,
+      "preferred_learning_slot": "Morning",
+      "current_certification": "AZ-204",
+      "study_completion_pct": 45
+    },
+    {
+      "employee_id": "EMP-002",
+      "meeting_hours_per_week": 15,
+      "focus_hours_per_week": 18,
+      "preferred_learning_slot": "Afternoon",
+      "current_certification": "AZ-400",
+      "study_completion_pct": 78
+    },
+    {
+      "employee_id": "EMP-003",
+      "meeting_hours_per_week": 18,
+      "focus_hours_per_week": 12,
+      "preferred_learning_slot": "Morning",
+      "current_certification": "DP-203",
+      "study_completion_pct": 60
+    },
+    {
+      "employee_id": "EMP-004",
+      "meeting_hours_per_week": 10,
+      "focus_hours_per_week": 22,
+      "preferred_learning_slot": "Evening",
+      "current_certification": "AZ-400",
+      "study_completion_pct": 90
+    },
+    {
+      "employee_id": "EMP-005",
+      "meeting_hours_per_week": 25,
+      "focus_hours_per_week": 8,
+      "preferred_learning_slot": "Morning",
+      "current_certification": "AZ-204",
+      "study_completion_pct": 30
+    }
+  ]
+}

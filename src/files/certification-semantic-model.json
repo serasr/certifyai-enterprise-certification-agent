@@ -1,0 +1,53 @@
+{
+  "note": "Synthetic data for demonstration purposes only",
+  "certifications": [
+    {
+      "id": "AZ-204",
+      "title": "Developing Solutions for Microsoft Azure",
+      "skills": ["API Development", "Azure Functions", "Storage", "Security"],
+      "recommended_hours": 20,
+      "pass_threshold": 75,
+      "prerequisites": ["Basic Azure knowledge"],
+      "roles": ["Cloud Engineer"]
+    },
+    {
+      "id": "AZ-400",
+      "title": "Designing and Implementing DevOps Solutions",
+      "skills": ["CI/CD", "Monitoring", "GitHub Actions", "Infrastructure as Code"],
+      "recommended_hours": 25,
+      "pass_threshold": 75,
+      "prerequisites": ["CI/CD experience"],
+      "roles": ["DevOps Engineer"]
+    },
+    {
+      "id": "DP-203",
+      "title": "Data Engineering on Microsoft Azure",
+      "skills": ["Data pipelines", "Azure Synapse", "Data Lake", "SQL"],
+      "recommended_hours": 22,
+      "pass_threshold": 75,
+      "prerequisites": ["SQL fundamentals"],
+      "roles": ["Data Engineer"]
+    },
+    {
+      "id": "AZ-305",
+      "title": "Designing Azure Infrastructure Solutions",
+      "skills": ["Architecture", "Networking", "Identity", "Storage"],
+      "recommended_hours": 24,
+      "pass_threshold": 75,
+      "prerequisites": ["AZ-204"],
+      "roles": ["Cloud Engineer"]
+    }
+  ],
+  "risk_thresholds": {
+    "high_risk": {
+      "practice_score_below": 65,
+      "study_hours_below": 15,
+      "focus_hours_below": 10
+    },
+    "moderate_risk": {
+      "practice_score_below": 75,
+      "study_hours_below": 20,
+      "focus_hours_below": 12
+    }
+  }
+}

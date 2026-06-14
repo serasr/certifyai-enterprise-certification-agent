@@ -1,0 +1,29 @@
+Quarterly Learning Performance Summary (Synthetic)
+
+Reporting Period: Q1 2026
+Department: Engineering
+
+Overall Metrics:
+- Average study time: 21 hours
+- Pass rate: 68%
+- Total certifications completed: 34
+- Certifications in progress: 12
+
+Team Breakdown:
+- Team A (Cloud): 72% pass rate, avg 23 study hours
+- Team B (DevOps): 65% pass rate, avg 19 study hours
+- Team C (Data): 68% pass rate, avg 21 study hours
+
+Key Observations:
+- Learners with more than 20 study hours and more than 75% 
+  on practice scores show stronger certification outcomes
+- Team B shows highest risk of exam failure due to low 
+  study hours and heavy meeting load
+- Morning study sessions correlate with 15% higher pass rates
+
+Recommendations:
+- Prioritize study plan adjustments for Team B
+- Introduce weekly checkpoint assessments
+- Allocate protected focus time for learners below threshold
+
+Note: This is synthetic data for demonstration purposes only.
