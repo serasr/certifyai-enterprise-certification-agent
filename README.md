@@ -9,6 +9,8 @@ CertifyAI is an intelligent multi-agent system that helps enterprise employees a
 ## Demo
 
 ![CertifyAI Web Application](docs/images/webapp_screenshot.png)
+![CertifyAI Demo_Video](docs/images/certifyai.mp4)
+
 
 **Demo Flow:**
 1. User identifies themselves with Employee ID (EMP-XXX for learners, MGR-XXX for managers)
