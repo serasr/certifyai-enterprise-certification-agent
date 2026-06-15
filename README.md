@@ -9,7 +9,6 @@ CertifyAI is an intelligent multi-agent system that helps enterprise employees a
 ## Demo
 
 ![CertifyAI Web Application](docs/images/webapp_screenshot.png)
-![CertifyAI Demo_Video](docs/images/certifyai.mp4)
 
 
 **Demo Flow:**
